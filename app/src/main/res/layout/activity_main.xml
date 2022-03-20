@@ -17,7 +17,6 @@
         app:layout_constraintVertical_weight="1" />
 
     <TextView
-        android:textColor="@color/black"
         android:id="@+id/expression_tv"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -25,24 +24,25 @@
         android:layout_marginTop="50dp"
         android:layout_marginEnd="20dp"
         android:gravity="end"
+        android:textColor="@color/black"
         android:textSize="40dp"
         app:layout_constraintEnd_toEndOf="@id/topLayout"
         app:layout_constraintStart_toStartOf="@id/topLayout"
         app:layout_constraintTop_toTopOf="@id/topLayout" />
 
     <TextView
-        android:textColor="@color/textColor"
         android:id="@+id/result_tv"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginBottom="30dp"
         android:layout_marginEnd="20dp"
+        android:layout_marginBottom="30dp"
         android:gravity="end"
+        android:textColor="@color/textColor"
         android:textSize="30dp"
+        app:layout_constraintBottom_toTopOf="@id/keyPadLayout"
         app:layout_constraintEnd_toEndOf="@id/topLayout"
-        app:layout_constraintStart_toStartOf="@id/topLayout"
-        app:layout_constraintBottom_toTopOf="@id/keyPadLayout" />
+        app:layout_constraintStart_toStartOf="@id/topLayout" />
 
 
     <TableLayout
@@ -280,13 +280,13 @@
             android:layout_weight="1">
 
             <ImageButton
+                android:onClick="historyButtonClicked"
                 android:id="@+id/historyButton"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="10dp"
                 android:layout_weight="1"
                 android:background="@drawable/button_ripple"
-                android:onClick="buttonClicked"
                 android:src="@drawable/ic_baseline_access_time_24"
                 android:textColor="@color/textColor"
                 android:textSize="30dp" />
@@ -328,5 +328,62 @@
         </TableRow>
 
     </TableLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/history"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/white"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/keyPadLayout"
+        app:layout_constraintEnd_toEndOf="@id/keyPadLayout"
+        app:layout_constraintStart_toStartOf="@id/keyPadLayout"
+        app:layout_constraintTop_toTopOf="@id/keyPadLayout"
+        tools:visibility="visible">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/historyCloseButton"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:background="@color/white"
+            android:onClick="historyCloseButtonClicked"
+            android:text="Close"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ScrollView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_margin="10dp"
+            app:layout_constraintBottom_toTopOf="@+id/historyClearButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/historyCloseButton">
+
+            <LinearLayout
+                android:id="@+id/historyLinearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:orientation="vertical" />
+
+        </ScrollView>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:onClick="historyClearButtonClicked"
+            android:id="@+id/historyClearButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:background="@drawable/green_background_button"
+            android:text="All Clear"
+            android:textColor="@color/white"
+            android:textSize="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

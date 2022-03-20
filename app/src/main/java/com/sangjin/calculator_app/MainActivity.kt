@@ -13,11 +13,8 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.app.NotificationCompat.getColor
-import androidx.core.content.ContextCompat.getColor
 import androidx.core.view.isVisible
 import androidx.room.Room
-import com.google.android.material.color.MaterialColors.getColor
 import org.w3c.dom.Text
 import java.lang.NumberFormatException
 
@@ -39,6 +36,15 @@ class MainActivity : AppCompatActivity() {
     }
     private val resultTextView by lazy {
         findViewById<TextView>(R.id.result_tv)
+    }
+    private val historyCloseButton by lazy {
+        findViewById<Button>(R.id.historyCloseButton)
+    }
+    private val historyClearButton by lazy {
+        findViewById<Button>(R.id.historyClearButton)
+    }
+    private val historyLayout by lazy {
+        findViewById<View>(R.id.history)
     }
 
     private var isOperator = false
@@ -75,6 +81,11 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun numberButtonClicked(number: String) {
+        if(isOperator) {
+            ExpressionTextView.append(" ")
+            isOperator = false
+        }
+
         val expressionTexts = ExpressionTextView.text.toString().split(" ")
 
         if (expressionTexts.isNotEmpty() && expressionTexts.last().length >= 15) {
@@ -109,12 +120,13 @@ class MainActivity : AppCompatActivity() {
         isOperator = true
         hasOperator = true
 
-
         val ssb = SpannableStringBuilder(ExpressionTextView.text)
         ssb.setSpan(ForegroundColorSpan(getColor(R.color.greenBackground)), //몰랐던 부분 : getColor를 사용해서 색상값을 가져오는것
             ExpressionTextView.text.length -1, //몰랐던 부분 : 텍스트뷰의 텍스트값을 가져와서 그것의 길이를 값으로 삼는것
             ExpressionTextView.text.length,
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+        ExpressionTextView.text = ssb // 몰랐던 부분 : ssb로 변경한 내용을 텍스트뷰의 값으로 넣어준다.
     }
 
 
@@ -123,6 +135,13 @@ class MainActivity : AppCompatActivity() {
         val exp1 = expressiontexts[0].toBigInteger() //몰랐던것 : String 타입을 Int 타입으로 바꾸는것
         val exp2 = expressiontexts[2].toBigInteger()
         val ope = expressiontexts[1]
+
+        if(!hasOperator || expressiontexts.size != 3) { //몰랐던부분 : 연산자가 없거나 배열의 사이즈가 3이 안된때를 예외시켜야함.
+            return ""
+        }
+        if(expressiontexts[0].isNotNumber() || expressiontexts[2].isNotNumber()) { // 몰랐던 부분 : 배열의 첫번째와 세번째가 숫자가 아닐때
+            return ""
+        }
 
         return when(ope) {
             "+" -> (exp1 + exp2).toString()
@@ -161,17 +180,31 @@ class MainActivity : AppCompatActivity() {
         ExpressionTextView.text = calculate()
         resultTextView.text = ""
 
+        isOperator = false
+        hasOperator = false
+
     }
 
     fun String.isNotNumber() : Boolean {
-        return try { // return을 try,catch 자체를 반환한다.
-            this.toBigInteger() // this 키워드를 사용한다.
+        return try { // 몰랐던 부분 : return 을 try,catch 자체를 반환한다.
+            this.toBigInteger() // 몰랐던 부분 : this 키워드를 사용한다.
             false
         }
         catch (e: NumberFormatException) {
             true
         }
     }
+    fun historyButtonClicked(view: View) {
+        historyLayout.isVisible = true //몰랐던 부분 : .Visibility 가 아니라 isVisible 을 사용한다.
+    }
+    fun historyCloseButtonClicked(view: View) {
+        historyLayout.isVisible = false
+    }
+    fun historyClearButtonClicked(view: View) {
+
+    }
+
+
 }
 
 
