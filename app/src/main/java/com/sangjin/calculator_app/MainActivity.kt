@@ -1,21 +1,19 @@
 package com.sangjin.calculator_app
 
 
+
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
-import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import androidx.room.Room
-import org.w3c.dom.Text
 import java.lang.NumberFormatException
 
 
@@ -46,6 +44,10 @@ class MainActivity : AppCompatActivity() {
     private val historyLayout by lazy {
         findViewById<View>(R.id.history)
     }
+    private val historyLinearLayout by lazy {
+        findViewById<LinearLayout>(R.id.historyLinearLayout)
+    }
+    lateinit var db: AppDatabase
 
     private var isOperator = false
     private var hasOperator = false
@@ -55,11 +57,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
+        db = Room.databaseBuilder(applicationContext, AppDatabase::class.java, "HistoryDatabase")
+            .build()
     }
 
 
-    private fun buttonClicked(view: View) {
+    fun buttonClicked(view: View) {
         when (view.id) {
             R.id.one -> numberButtonClicked("1")
             R.id.two -> numberButtonClicked("2")
@@ -81,12 +84,12 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun numberButtonClicked(number: String) {
-        if(isOperator) {
+        if (isOperator) {
             ExpressionTextView.append(" ")
-            isOperator = false
         }
+        isOperator = false
 
-        val expressionTexts = ExpressionTextView.text.toString().split(" ")
+        val expressionTexts = ExpressionTextView.text.split(" ")
 
         if (expressionTexts.isNotEmpty() && expressionTexts.last().length >= 15) {
             Toast.makeText(this, "최대 15자까지 입력할 수 있습니다.", Toast.LENGTH_SHORT).show()
@@ -101,49 +104,81 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun operatorButtonClicked(ope: String) {
-        val expressionTexts = ExpressionTextView.text.toString().split(" ")
 
-        if(ExpressionTextView.text.isEmpty()) {
+        if (ExpressionTextView.text.isEmpty()) {
             return
         }
 
         when { //몰랐던 부분 : when 문을 사용해서 예외사항을 처리하는것.
             isOperator -> {
-                expressionTexts.dropLast(1) + ope
+                val expressionText = ExpressionTextView.text.toString()
+                 ExpressionTextView.text =  expressionText.dropLast(1) + ope
             }
             hasOperator -> {
                 Toast.makeText(this, "연산자는 한번만 입력할 수 있습니다.", Toast.LENGTH_SHORT).show()
                 return
             }
+            else -> ExpressionTextView.append(" $ope")
         }
-        ExpressionTextView.append(" $ope")
-        isOperator = true
-        hasOperator = true
 
         val ssb = SpannableStringBuilder(ExpressionTextView.text)
-        ssb.setSpan(ForegroundColorSpan(getColor(R.color.greenBackground)), //몰랐던 부분 : getColor를 사용해서 색상값을 가져오는것
-            ExpressionTextView.text.length -1, //몰랐던 부분 : 텍스트뷰의 텍스트값을 가져와서 그것의 길이를 값으로 삼는것
+        ssb.setSpan(
+            ForegroundColorSpan(getColor(R.color.greenBackground)), //몰랐던 부분 : getColor 를 사용해서 색상값을 가져오는것
+            ExpressionTextView.text.length - 1, //몰랐던 부분 : 텍스트뷰의 텍스트값을 가져와서 그것의 길이를 값으로 삼는것
             ExpressionTextView.text.length,
-            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
 
         ExpressionTextView.text = ssb // 몰랐던 부분 : ssb로 변경한 내용을 텍스트뷰의 값으로 넣어준다.
+
+        isOperator = true
+        hasOperator = true
     }
 
+    fun resultButtonClicked(view: View) {
+        val expressioontexts = ExpressionTextView.text.split(" ")
 
-    private fun calculate() : String { //
-        val expressiontexts = ExpressionTextView.text.toString().split(" ")
+        if (ExpressionTextView.text.isEmpty() || expressioontexts.size == 1) {
+            return
+        }
+        if (expressioontexts.size != 3 && hasOperator) {
+            Toast.makeText(this, "계산할 값을 모두 입력해주세요.", Toast.LENGTH_SHORT).show()
+            return
+        }
+        if (expressioontexts[0].isNotNumber() && expressioontexts[2].isNotNumber()) {
+            Toast.makeText(this, "오류가 일어났습니다.", Toast.LENGTH_SHORT).show()
+            return
+        }
+        val expressionText = ExpressionTextView.text.toString()
+        val resultText = calculate()
+        Thread(Runnable {
+            db.historyDao().insertHistory(history(null, expressionText, resultText))
+        }).start()
+
+
+        resultTextView.text = ""
+        ExpressionTextView.text = resultText
+
+        isOperator = false
+        hasOperator = false
+
+    }
+
+    private fun calculate(): String { //
+        val expressiontexts = ExpressionTextView.text.split(" ")
+
+        if (!hasOperator || expressiontexts.size != 3) { //몰랐던부분 : 연산자가 없거나 배열의 사이즈가 3이 안된때를 예외시켜야함.
+            return ""
+        }
+        if (expressiontexts[0].isNotNumber() || expressiontexts[2].isNotNumber()) { // 몰랐던 부분 : 배열의 첫번째와 세번째가 숫자가 아닐때
+            return ""
+        }
+
         val exp1 = expressiontexts[0].toBigInteger() //몰랐던것 : String 타입을 Int 타입으로 바꾸는것
         val exp2 = expressiontexts[2].toBigInteger()
         val ope = expressiontexts[1]
 
-        if(!hasOperator || expressiontexts.size != 3) { //몰랐던부분 : 연산자가 없거나 배열의 사이즈가 3이 안된때를 예외시켜야함.
-            return ""
-        }
-        if(expressiontexts[0].isNotNumber() || expressiontexts[2].isNotNumber()) { // 몰랐던 부분 : 배열의 첫번째와 세번째가 숫자가 아닐때
-            return ""
-        }
-
-        return when(ope) {
+        return when (ope) {
             "+" -> (exp1 + exp2).toString()
             "-" -> (exp1 - exp2).toString()
             "/" -> (exp1 / exp2).toString()
@@ -153,55 +188,47 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun clearButtonClicked(view: View) {
+    fun clearButtonClicked(view: View) {
         ExpressionTextView.text = ""
         resultTextView.text = ""
         isOperator = false
         hasOperator = false
     }
 
-    private fun resultButtonClicked(view: View) {
-        val expressioontexts = ExpressionTextView.text.toString().split(" ")
-        val exp1 = expressioontexts[0].toString()
-        val exp2 = expressioontexts[2].toString()
-
-        if(ExpressionTextView.text.isEmpty() ||  expressioontexts.size == 1) {
-            return
-        }
-        if(expressioontexts.size != 3 && hasOperator) {
-            Toast.makeText(this, "계산할 값을 모두 입력해주세요.", Toast.LENGTH_SHORT).show()
-            return
-        }
-        if(exp1.isNotNumber() && exp2.isNotNumber()) {
-            Toast.makeText(this, "오류가 일어났습니다.", Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        ExpressionTextView.text = calculate()
-        resultTextView.text = ""
-
-        isOperator = false
-        hasOperator = false
-
-    }
-
-    fun String.isNotNumber() : Boolean {
+    fun String.isNotNumber(): Boolean {
         return try { // 몰랐던 부분 : return 을 try,catch 자체를 반환한다.
             this.toBigInteger() // 몰랐던 부분 : this 키워드를 사용한다.
             false
-        }
-        catch (e: NumberFormatException) {
+        } catch (e: NumberFormatException) {
             true
         }
     }
+
     fun historyButtonClicked(view: View) {
-        historyLayout.isVisible = true //몰랐던 부분 : .Visibility 가 아니라 isVisible 을 사용한다.
+        historyLayout.isVisible = true
+
+        Thread(Runnable {
+            db.historyDao().getAll().forEach { //디비에서 데이터를 불러와서 뷰에 그려야함 - 모든 데이터를 리스트 형태로 가져와서
+                val historyView = layoutInflater.inflate(R.layout.history_row, null, false)
+                runOnUiThread { //유아이를 그려야하기 때문에 런온유아이스레드 함수로 각각의 데이터를 history_row 라는 만들어진 액티비티에 값으로 넣는다.
+                    historyView.findViewById<TextView>(R.id.expression_tv).text = it.expression
+                    historyView.findViewById<TextView>(R.id.result_tv).text = it.result
+                    historyLinearLayout.addView(historyView)
+                }
+            }
+        }).start()
     }
+
     fun historyCloseButtonClicked(view: View) {
         historyLayout.isVisible = false
     }
-    fun historyClearButtonClicked(view: View) {
 
+    fun historyClearButtonClicked(view: View) {
+        historyLinearLayout.removeAllViews()
+        //DB와 리니어레이아웃 모두 삭제
+        Thread(Runnable {
+            db.historyDao().deleteAll()
+        }).start()
     }
 
 
