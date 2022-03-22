@@ -7,10 +7,10 @@
     tools:context=".MainActivity">
 
     <View
-        android:id="@+id/topLayout"
+        android:id="@+id/topView"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/keyPadLayout"
+        app:layout_constraintBottom_toTopOf="@+id/keyPad"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -20,49 +20,40 @@
         android:id="@+id/expression_tv"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="50dp"
-        android:layout_marginEnd="20dp"
+        android:layout_margin="20dp"
         android:gravity="end"
-        android:textColor="@color/black"
-        android:textSize="40dp"
-        app:layout_constraintEnd_toEndOf="@id/topLayout"
-        app:layout_constraintStart_toStartOf="@id/topLayout"
-        app:layout_constraintTop_toTopOf="@id/topLayout" />
+        android:textSize="25dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/result_tv"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="30dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="50dp"
         android:gravity="end"
-        android:textColor="@color/textColor"
-        android:textSize="30dp"
-        app:layout_constraintBottom_toTopOf="@id/keyPadLayout"
-        app:layout_constraintEnd_toEndOf="@id/topLayout"
-        app:layout_constraintStart_toStartOf="@id/topLayout" />
-
+        android:textSize="20dp"
+        app:layout_constraintBottom_toTopOf="@id/keyPad"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TableLayout
-        android:id="@+id/keyPadLayout"
-        android:layout_width="0dp"
+        android:id="@+id/keyPad"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/topLayout"
+        app:layout_constraintTop_toBottomOf="@+id/topView"
         app:layout_constraintVertical_weight="1.5">
 
-        <TableRow
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1">
+        <TableRow android:layout_weight="1">
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/clearButton"
-                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="10dp"
                 android:layout_weight="1"
@@ -70,21 +61,19 @@
                 android:onClick="clearButtonClicked"
                 android:text="C"
                 android:textColor="@color/red"
-                android:textSize="30dp" />
+                android:textSize="17dp" />
 
             <androidx.appcompat.widget.AppCompatButton
-                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="10dp"
                 android:layout_weight="1"
                 android:background="@drawable/button_ripple"
                 android:text="()"
                 android:textColor="@color/greenBackground"
-                android:textSize="30dp" />
+                android:textSize="17dp" />
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/moduloButton"
-                android:layout_width="match_parent"
+                android:id="@+id/Modulo"
                 android:layout_height="match_parent"
                 android:layout_margin="10dp"
                 android:layout_weight="1"
@@ -92,11 +81,10 @@
                 android:onClick="buttonClicked"
                 android:text="%"
                 android:textColor="@color/greenBackground"
-                android:textSize="30dp" />
+                android:textSize="17dp" />
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/dividerButton"
-                android:layout_width="wrap_content"
+                android:id="@+id/Divider"
                 android:layout_height="match_parent"
                 android:layout_margin="10dp"
                 android:layout_weight="1"
@@ -104,110 +92,90 @@
                 android:onClick="buttonClicked"
                 android:text="/"
                 android:textColor="@color/greenBackground"
-                android:textSize="30dp" />
+                android:textSize="17dp" />
 
 
         </TableRow>
 
-        <TableRow
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1">
+        <TableRow android:layout_weight="1">
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/seven"
-                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="10dp"
                 android:layout_weight="1"
                 android:background="@drawable/button_ripple"
                 android:onClick="buttonClicked"
                 android:text="7"
-                android:textColor="@color/textColor"
-                android:textSize="30dp" />
+                android:textSize="17dp" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/eight"
-                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="10dp"
                 android:layout_weight="1"
                 android:background="@drawable/button_ripple"
                 android:onClick="buttonClicked"
                 android:text="8"
-                android:textColor="@color/textColor"
-                android:textSize="30dp" />
+                android:textSize="17dp" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/nine"
-                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="10dp"
                 android:layout_weight="1"
                 android:background="@drawable/button_ripple"
                 android:onClick="buttonClicked"
                 android:text="9"
-                android:textColor="@color/textColor"
-                android:textSize="30dp" />
+                android:textSize="17dp" />
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/multiflyButton"
-                android:layout_width="wrap_content"
+                android:id="@+id/Multiply"
                 android:layout_height="match_parent"
                 android:layout_margin="10dp"
                 android:layout_weight="1"
                 android:background="@drawable/button_ripple"
+                android:text="x"
                 android:onClick="buttonClicked"
-                android:text="X"
                 android:textColor="@color/greenBackground"
-                android:textSize="30dp" />
+                android:textSize="17dp" />
 
         </TableRow>
 
-        <TableRow
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1">
+        <TableRow android:layout_weight="1">
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/four"
-                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="10dp"
                 android:layout_weight="1"
                 android:background="@drawable/button_ripple"
                 android:onClick="buttonClicked"
                 android:text="4"
-                android:textColor="@color/textColor"
-                android:textSize="30dp" />
+                android:textSize="17dp" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/five"
-                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="10dp"
                 android:layout_weight="1"
                 android:background="@drawable/button_ripple"
                 android:onClick="buttonClicked"
                 android:text="5"
-                android:textColor="@color/textColor"
-                android:textSize="30dp" />
+                android:textSize="17dp" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/six"
-                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="10dp"
                 android:layout_weight="1"
                 android:background="@drawable/button_ripple"
                 android:onClick="buttonClicked"
                 android:text="6"
-                android:textColor="@color/textColor"
-                android:textSize="30dp" />
+                android:textSize="17dp" />
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/minusButton"
-                android:layout_width="wrap_content"
+                android:id="@+id/minus"
                 android:layout_height="match_parent"
                 android:layout_margin="10dp"
                 android:layout_weight="1"
@@ -215,54 +183,44 @@
                 android:onClick="buttonClicked"
                 android:text="-"
                 android:textColor="@color/greenBackground"
-                android:textSize="30dp" />
+                android:textSize="17dp" />
 
         </TableRow>
 
-        <TableRow
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1">
+        <TableRow android:layout_weight="1">
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/one"
-                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="10dp"
                 android:layout_weight="1"
                 android:background="@drawable/button_ripple"
                 android:onClick="buttonClicked"
                 android:text="1"
-                android:textColor="@color/textColor"
-                android:textSize="30dp" />
+                android:textSize="17dp" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/two"
-                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="10dp"
                 android:layout_weight="1"
                 android:background="@drawable/button_ripple"
                 android:onClick="buttonClicked"
                 android:text="2"
-                android:textColor="@color/textColor"
-                android:textSize="30dp" />
+                android:textSize="17dp" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/three"
-                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="10dp"
                 android:layout_weight="1"
                 android:background="@drawable/button_ripple"
                 android:onClick="buttonClicked"
                 android:text="3"
-                android:textColor="@color/textColor"
-                android:textSize="30dp" />
+                android:textSize="17dp" />
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/plusButton"
-                android:layout_width="wrap_content"
+                android:id="@+id/plus"
                 android:layout_height="match_parent"
                 android:layout_margin="10dp"
                 android:layout_weight="1"
@@ -270,52 +228,42 @@
                 android:onClick="buttonClicked"
                 android:text="+"
                 android:textColor="@color/greenBackground"
-                android:textSize="30dp" />
+                android:textSize="17dp" />
 
         </TableRow>
 
-        <TableRow
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1">
+        <TableRow android:layout_weight="1">
 
             <ImageButton
-                android:onClick="historyButtonClicked"
                 android:id="@+id/historyButton"
-                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="10dp"
                 android:layout_weight="1"
                 android:background="@drawable/button_ripple"
+                android:onClick="historyButtonClicked"
                 android:src="@drawable/ic_baseline_access_time_24"
-                android:textColor="@color/textColor"
-                android:textSize="30dp" />
+                android:textSize="17dp" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/zero"
-                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="10dp"
                 android:layout_weight="1"
                 android:background="@drawable/button_ripple"
                 android:onClick="buttonClicked"
                 android:text="0"
-                android:textColor="@color/textColor"
-                android:textSize="30dp" />
+                android:textSize="17dp" />
 
             <androidx.appcompat.widget.AppCompatButton
-                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="10dp"
                 android:layout_weight="1"
                 android:background="@drawable/button_ripple"
                 android:text="."
-                android:textColor="@color/textColor"
-                android:textSize="30dp" />
+                android:textSize="17dp" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/resultButton"
-                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_margin="10dp"
                 android:layout_weight="1"
@@ -323,7 +271,7 @@
                 android:onClick="resultButtonClicked"
                 android:text="="
                 android:textColor="@color/white"
-                android:textSize="30dp" />
+                android:textSize="17dp" />
 
         </TableRow>
 
@@ -333,39 +281,44 @@
         android:id="@+id/history"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="@id/keyPad"
+        app:layout_constraintEnd_toEndOf="@id/keyPad"
+        app:layout_constraintStart_toStartOf="@id/keyPad"
+        app:layout_constraintBottom_toBottomOf="@id/keyPad"
         android:background="@color/white"
+        tools:visibility="visible"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@id/keyPadLayout"
-        app:layout_constraintEnd_toEndOf="@id/keyPadLayout"
-        app:layout_constraintStart_toStartOf="@id/keyPadLayout"
-        app:layout_constraintTop_toTopOf="@id/keyPadLayout"
-        tools:visibility="visible">
+        >
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/historyCloseButton"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:background="@color/white"
             android:onClick="historyCloseButtonClicked"
-            android:text="Close"
+            android:id="@+id/closeHitoryButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:text="Close"
+            />
 
         <ScrollView
+            android:layout_margin="10dp"
+            android:id="@+id/historyScrollView"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_margin="10dp"
-            app:layout_constraintBottom_toTopOf="@+id/historyClearButton"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/closeHitoryButton"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/historyCloseButton">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/historyClearButton"
+            >
 
             <LinearLayout
                 android:id="@+id/historyLinearLayout"
+                android:layout_margin="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                android:orientation="vertical" />
+                android:orientation="vertical"
+                />
 
         </ScrollView>
 
@@ -374,14 +327,16 @@
             android:id="@+id/historyClearButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="15dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             android:background="@drawable/green_background_button"
+            android:layout_margin="10dp"
             android:text="All Clear"
             android:textColor="@color/white"
-            android:textSize="20dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            android:textSize="17dp"
+            />
+
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

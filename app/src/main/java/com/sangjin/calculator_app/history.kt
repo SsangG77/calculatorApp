@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class history(
-    @PrimaryKey val id: Int?,
-    @ColumnInfo(name = "expression") val expression: String?,
-    @ColumnInfo(name = "result") val result: String?,
-)
+    @PrimaryKey var uid:Int?,
+    @ColumnInfo(name = "ExpressionText") var expressionText:String?,
+    @ColumnInfo(name = "ResultText") var resultText:String?
+    )
